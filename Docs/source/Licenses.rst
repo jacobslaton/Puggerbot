@@ -6,7 +6,7 @@ Licenses
 Puggerbot Source Code
 ---------------------
 
-License - N/A
+License - Unlicense <http://unlicense.org/>
 
 Puggerbot Icon
 --------------

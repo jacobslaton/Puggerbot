@@ -1,4 +1,3 @@
-Docs/build/*
 Docs/build/html/*
 !Docs/build/html/*.html
 !Docs/build/html/*.js
