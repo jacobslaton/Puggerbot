@@ -3,6 +3,8 @@
 Links
 =====
 
+Puggerbot's Source - https://github.com/jacobslaton/Puggerbot
+
 Discord Developer Portal - https://discordapp.com/developers/applications/
 
 Documentation

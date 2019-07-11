@@ -58,7 +58,7 @@ function help(client, msg, args=[], batch=false) {
 			.setThumbnail('https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg')
 			.setDescription('Version '+config.version)
 			.addField('Command Specific Help', 'Type `>help [command_name]` for more information on a command.')
-			.addField('More Information', 'For more information, use the `>info` command or visit my github page.')
+			.addField('More Information', 'For more information, visit [my github page](https://github.com/jacobslaton/Puggerbot).')
 			.setTimestamp()
 		);
 		return;
@@ -99,13 +99,5 @@ function update(client, msg, args=[], batch=false) {
 		return 2;
 	}
 }
-// function version(client, msg, args=[], batch=false) {
-// 	msg.channel.send(new Discord.RichEmbed()
-// 		.setColor(config.embed_color)
-// 		.setTitle(client.user.username)
-// 		.setDescription('v'+config.version)
-// 		.setTimestamp()
-// 	);
-// }
 
 module.exports = cmds;

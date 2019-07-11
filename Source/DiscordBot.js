@@ -18,9 +18,6 @@ class DiscordBot {
 	}
 	async handle_cmd(msg) {
 		if (msg.author.id === this.client.user.id) { return; }
-		for (let ii = 0; ii < msg.embeds.length; ++ii) {
-			console.log(msg.embeds[ii]);
-		}
 		const errors = cmd_util.check_msg(msg.content);
 		if (errors != '') {
 			msg.channel.send(new Discord.RichEmbed()
