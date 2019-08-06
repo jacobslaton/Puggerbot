@@ -21,6 +21,12 @@ Example::
 	Message: This bark will be included even though it comes before the command. >bark bork bark
 	Response: Bork bork bark bork!
 
+bible
+-----
+
+Lookup verses from the Bible.
+Choose your version by passing it in the "v" flag and indicate which passage by passing it in the "p" flag.
+
 help
 ----
 

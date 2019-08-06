@@ -30,8 +30,23 @@ function parse_args(arg_str) {
 	}
 	return args;
 }
+function parse_flags(arg_str) {
+	const re_flags = /--?([A-z]*)(?: *=? *((?:[A-z0-9]+)|(?:"(?:[^\\"]|\\.)*"))?)/;
+	let flags = {};
+	let flag_found = re_flags.exec(arg_str);
+	while (flag_found != null) {
+		arg_str = arg_str.slice(flag_found.index+flag_found[0].length);
+		let flag_value = flag_found[2];
+		if (flag_value != null && flag_value.indexOf('"') > -1) {
+			flag_value = flag_value.slice(1, -1);
+		}
+		flags[flag_found[1]] = flag_value;
+		flag_found = re_flags.exec(arg_str);
+	}
+	return flags;
+}
 function parse_cmds(content) {
-	const re_cmd = />([A-z_]+)((?:( +"(?:[^\\"]|\\.)*")|(?: +[^ ">;\n]+))*)/;
+	const re_cmd = />([A-z_]+)((?:(?: +"(?:[^\\"]|\\.)*")|(?: +[^ ;\n]+))*)/;
 	let cmds = [];
 	let subcontent = content;
 	let cmd_match = re_cmd.exec(subcontent);
@@ -39,7 +54,8 @@ function parse_cmds(content) {
 		subcontent = subcontent.slice(cmd_match.index+cmd_match[0].length);
 		cmds.push({
 			'cmd' : cmd_match[1],
-			'args' : parse_args(cmd_match[2])
+			'args' : parse_args(cmd_match[2]),
+			'flags' : parse_flags(cmd_match[2])
 		});
 		cmd_match = re_cmd.exec(subcontent);
 	}
@@ -49,5 +65,6 @@ function parse_cmds(content) {
 module.exports = {
 	'check_msg' : check_msg,
 	'parse_args' : parse_args,
+	'parse_flags' : parse_flags,
 	'parse_cmds' : parse_cmds
 };

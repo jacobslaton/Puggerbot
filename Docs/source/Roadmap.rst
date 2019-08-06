@@ -17,6 +17,25 @@ v0.1.0 - The Basics
 	- update
 	- shutdown
 
+v0.2.0 - Bible
+--------------
+
+- Features
+	- Get passage by reference
+- Commands
+	- bible
+
+v0.2.? - Bible
+--------------
+
+- Features
+	- Get passage by reference and version
+	- Store preferred version for each user
+- Commands
+	- verse_of_the_day
+- Maybe
+	- Allow users to add prayer requests and view ones from the servers they are in
+
 v0.?.0 - Admin Tools
 --------------------
 
@@ -39,22 +58,17 @@ v0.?.0 - Admin Tools
 	- make_voice
 	- delete_voice
 
-v0.?.0 - Bible
---------------
-
-- Features
-	- Get passage by reference and version
-	- Allow users to add prayer requests and view ones from the servers they are in
-- Commands
-	- verse_of_the_day
-
 v0.?.0 - Misc.
 --------------
 
 - Features
 	- Reminders for users and channels
 	- Poll system that uses emojis to track votes
-		- Have polls timeout and edit the reply to display the results
+		- Have polls timeout and edit the message to display the results
+	- More interactable commands
+		- treats
+		- walk
+		- sic 'em
 
 v0.?.0 - Music
 --------------
@@ -77,9 +91,8 @@ v0.?.0 - PuggerScript
 v0.?.0 - RNG
 ------------
 
-Should there be any economy?
-
 - Features
+	- Currency
 	- Banroulette
 	- Roll Tables
 - Commands
@@ -110,6 +123,7 @@ v0.?.0 - TTRPG
 		- can be set to split with or without converting currency
 		- also displays remainder
 	- worth
+		- calculates the total worth of several types of currency into a single unit of currency
 - Maybe
 	- Combat management
 	- Initiative tracker

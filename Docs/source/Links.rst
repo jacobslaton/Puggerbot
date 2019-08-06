@@ -14,6 +14,13 @@ Node JS - https://nodejs.org/dist/latest-v12.x/docs/api/
 
 discord.js - https://discord.js.org/#/docs/main/stable/general/welcome
 
+Install Node on Linux
+---------------------
+
+https://stackoverflow.com/questions/8191459/how-do-i-update-node-js
+
+https://github.com/nvm-sh/nvm
+
 Fixing NPM
 ----------
 

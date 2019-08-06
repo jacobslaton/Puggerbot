@@ -7,5 +7,6 @@ Puggerbot
 
 	Commands.rst
 	Roadmap.rst
+	Issues.rst
 	Links.rst
 	Licenses.rst

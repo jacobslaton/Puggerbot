@@ -1,3 +1,4 @@
+Docs/build/doctrees
 Docs/build/html/*
 !Docs/build/html/*.html
 !Docs/build/html/*.js
@@ -6,6 +7,7 @@ Media/*
 !Media/puggerbot.jpg
 Source/config.js
 Source/sandbox.js
+SQL
 Legacy
 node_modules
 package-lock.json

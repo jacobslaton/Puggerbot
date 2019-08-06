@@ -4,17 +4,36 @@ const config = require('./config');
 const Discord = require('discord.js');
 const error_text = require('./error_text');
 const fs = require('fs');
+const path = require('path');
+const sqlite3 = require('sqlite3').verbose();
 
 class DiscordBot {
 	constructor() {
 		this.exit_code = null;
+		this.init();
 		this.client = new Discord.Client();
-		this.client.on('ready', () => { this.init(); });
+		this.client.on('ready', () => {
+			console.log(`${this.client.user.username} is online.`);
+		});
 		this.client.on('message', msg => { this.handle_cmd(msg); });
 		this.client.on('disconnect', () => { this.shutdown(); });
 	}
 	init() {
-		console.log(`${this.client.user.username} is online.`);
+		this.db_ref = null;
+		try {
+			fs.accessSync(path.join('SQL', 'reference.db'));
+		} catch (err) {
+			this.db_ref = new sqlite3.Database(path.join('SQL', 'reference.db'));
+			const path_ref = path.join('SQL', 'Reference');
+			const files_ref = fs.readdirSync(path_ref);
+			for (let ii = 0; ii < files_ref.length; ++ii) {
+				console.log(files_ref[ii]);
+				this.db_ref.exec(fs.readFileSync(path.join(path_ref, files_ref[ii]), 'utf8'));
+			}
+			this.db_ref.close();
+		}
+		this.db_ref = new sqlite3.Database('SQL/reference.db', sqlite3.OPEN_READONLY);
+		this.db_data = new sqlite3.Database('SQL/user_data.db');
 	}
 	async handle_cmd(msg) {
 		if (msg.author.id === this.client.user.id) { return; }
@@ -34,7 +53,9 @@ class DiscordBot {
 				this.client,
 				msg,
 				msg_cmds[ii].args,
-				msg_cmds.length > 1
+				msg_cmds[ii].flags,
+				this.db_ref,
+				this.db_data
 			);
 			if (this.exit_code == 0 || this.exit_code == 2) {
 				console.log(`${this.client.user.username} is offline.`);
@@ -44,6 +65,8 @@ class DiscordBot {
 		}
 	}
 	shutdown() {
+		this.db_data.close();
+		this.db_ref.close();
 		fs.writeFile('exit_code.txt', this.exit_code, err => {
 			if (err) {
 				console.log(err);

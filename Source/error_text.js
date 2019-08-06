@@ -16,10 +16,13 @@ const error_text = {
 		'Your query has been sent to the Shadow Realm!',
 		'Your query has entered the *danger zone*.'
 	],
-	'odd__double_quotes' : 'Error: this message has an odd number of unescaped double quotes',
 	'missing_semicolon' : 'Error: {} command is a missing trailing semicolon',
 	'bad_command' : 'Bork? (I had some trouble unsterstanding your commands.)',
-	'no_help' : 'Bork? (I couldn\'t find a help page for that command.)'
+	'no_help' : 'Bork? (I couldn\'t find a help page for that command.)',
+	'bad_args' : 'One or more of the arguments passed to this command were not formatted correctly.',
+	'bible_no_book' : 'There is no book named <book> in the Bible.',
+	'bible_no_passage' : 'The passage you requested does not exist.',
+	'bible_long_passage' : 'Something went wrong. The passage you requested was most likely too large.'
 }
 
 module.exports = error_text;
