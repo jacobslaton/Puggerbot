@@ -97,7 +97,6 @@ function bible(client, msg, args=[], flags={}, db_ref, db_data) {
 					}
 					passage[passage.length-1] += verse;
 				});
-				console.log(passage);
 				if (passage.length == 1 && passage[0] == '') {
 					const empty_query = error_text['empty_query'][Math.floor(Math.random()*error_text['empty_query'].length)];
 					msg.channel.send(new Discord.RichEmbed()
@@ -107,7 +106,6 @@ function bible(client, msg, args=[], flags={}, db_ref, db_data) {
 					);
 					return;
 				}
-				console.log(passage);
 				if (passage.join('').length > 6000) {
 					const empty_query = error_text['empty_query'][Math.floor(Math.random()*error_text['empty_query'].length)];
 					msg.channel.send(new Discord.RichEmbed()

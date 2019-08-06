@@ -31,13 +31,13 @@ function parse_args(arg_str) {
 	return args;
 }
 function parse_flags(arg_str) {
-	const re_flags = /--?([A-z]*)(?: *=? *((?:[A-z0-9]+)|(?:"(?:[^\\"]|\\.)*"))?)/;
+	const re_flags = /--?([A-z]*)(?: *=? *((?:[A-z0-9]+)|(?:"(?:[^\\"“”]|\\.)*")|(?:“(?:[^\\"“”]|\\.)*”))?)/;
 	let flags = {};
 	let flag_found = re_flags.exec(arg_str);
 	while (flag_found != null) {
 		arg_str = arg_str.slice(flag_found.index+flag_found[0].length);
 		let flag_value = flag_found[2];
-		if (flag_value != null && flag_value.indexOf('"') > -1) {
+		if (flag_value != null && (flag_value.indexOf('"') > -1 || flag_value.indexOf('“') > -1)) {
 			flag_value = flag_value.slice(1, -1);
 		}
 		flags[flag_found[1]] = flag_value;
