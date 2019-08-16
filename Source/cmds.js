@@ -1,4 +1,5 @@
 const config = require('./config');
+const crypto = require('crypto');
 const Discord = require('discord.js');
 const error_text = require('./error_text');
 const fs = require('fs');
@@ -15,6 +16,16 @@ function is_owner(msg) {
 function is_admin(msg) {
 	return is_owner(msg) || msg.member.hasPermission('ADMINISTRATOR');
 }
+function empty_query() {
+	return error_text['empty_query'][Math.floor(Math.random()*error_text['empty_query'].length)];
+}
+function send_error(msg, title, text) {
+	msg.channel.send(new Discord.RichEmbed()
+		.setColor(config.embed_color)
+		.setAuthor(client.user.username, config.profile_image, '')
+		.addField(title, text)
+	);
+}
 
 //////////////
 // Commands //
@@ -29,6 +40,7 @@ const cmds = {
 	'pet' : pet,
 	'shutdown' : shutdown,
 	'update' : update,
+	'votd' : votd,
 }
 
 function barkbork(client, msg, args=[], flags={}, db_ref, db_data) {
@@ -51,16 +63,38 @@ function barkbork(client, msg, args=[], flags={}, db_ref, db_data) {
 	response = response.charAt(0).toUpperCase()+response.slice(1, -1)+'!';
 	msg.channel.send(response);
 }
+function make_passage_embed(client, msg, passage, version, rows) {
+	let fields = [''];
+	rows.forEach(function (row) {
+		let verse = ' **['+row.verse_num+']** '+row.text;
+		if (fields[fields.length-1].length+verse.length > 1024) {
+			fields.push('');
+		}
+		fields[fields.length-1] += verse;
+	});
+	if (fields.length == 1 && fields[0] == '') {
+		send_error(msg, empty_query(), error_text['bible_no_passage']);
+		return;
+	}
+	if (fields.join('').length > 6000) {
+		send_error(msg, empty_query(), error_text['bible_long_passage']);
+		return;
+	}
+	let embed = new Discord.RichEmbed()
+		.setColor(config.embed_color)
+		.setAuthor(client.user.username, config.profile_image, '')
+		.setDescription('**'+passage+' ('+version.toUpperCase()+')**');
+	for (let ii = 0; ii < fields.length; ++ii) {
+		embed.addField('-', fields[ii].slice(1));
+	}
+	return embed;
+}
 function bible(client, msg, args=[], flags={}, db_ref, db_data) {
 	// Get passage
 	const re_passage = /((?:[0-9] )?(?:[A-z]| )*) ([0-9]+)(?::([0-9]+(?:-[0-9]+)?))?/;
 	const match = re_passage.exec(flags['p']);
 	if (!match) {
-		msg.channel.send(new Discord.RichEmbed()
-			.setColor(config.embed_color)
-			.setTitle(error_text.bad_command)
-			.setDescription(error_text['bad_args'])
-		);
+		send_error(msg, error_text.bad_command, error_text['bad_args']);
 		return;
 	}
 	const book = match[1];
@@ -74,57 +108,32 @@ function bible(client, msg, args=[], flags={}, db_ref, db_data) {
 	}
 	verse_start = Number(verse_start);
 	verse_end = Number(verse_end);
-	// Select verses
-	db_ref.get('select book_id from books where title = ?', [book], function (err, row) {
+	// Get version
+	let version = flags['v'];
+	if (!version) {
+		version = 'kjv';
+	} else {
+		version = version.toLowerCase();
+	}
+	db_ref.get('select name from sqlite_master where type=\'table\' and name=?', ['bible_'+version], function (err, row) {
 		if (!row) {
-			const empty_query = error_text['empty_query'][Math.floor(Math.random()*error_text['empty_query'].length)];
-			msg.channel.send(new Discord.RichEmbed()
-				.setColor(config.embed_color)
-				.setAuthor(client.user.username, 'https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg', '')
-				.addField(empty_query, error_text['bible_no_book'].replace('<book>', book))
-			);
+			send_error(msg, error_text.bad_command, error_text['bad_args']);
 			return;
 		}
-		db_ref.all(
-			'select verse_num, text from bible_esv where book_id = ? and chapter = ? and verse_num between ? and ?',
-			[row.book_id, chapter, verse_start, verse_end],
-			function (err, rows) {
-				let passage = [''];
-				rows.forEach(function (row) {
-					let verse = ' **['+row.verse_num+']** '+row.text;
-					if (passage[passage.length-1].length+verse.length > 1024) {
-						passage.push('');
-					}
-					passage[passage.length-1] += verse;
-				});
-				if (passage.length == 1 && passage[0] == '') {
-					const empty_query = error_text['empty_query'][Math.floor(Math.random()*error_text['empty_query'].length)];
-					msg.channel.send(new Discord.RichEmbed()
-						.setColor(config.embed_color)
-						.setAuthor(client.user.username, 'https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg', '')
-						.addField(empty_query, error_text['bible_no_passage'])
-					);
-					return;
-				}
-				if (passage.join('').length > 6000) {
-					const empty_query = error_text['empty_query'][Math.floor(Math.random()*error_text['empty_query'].length)];
-					msg.channel.send(new Discord.RichEmbed()
-						.setColor(config.embed_color)
-						.setAuthor(client.user.username, 'https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg', '')
-						.addField(empty_query, error_text['bible_long_passage'])
-					);
-					return;
-				}
-				let embed = new Discord.RichEmbed()
-					.setColor(config.embed_color)
-					.setAuthor(client.user.username, 'https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg', '')
-					.setDescription('**'+flags['p']+'**');
-				for (let ii = 0; ii < passage.length; ++ii) {
-					embed.addField('-', passage[ii].slice(1));
-				}
-				msg.channel.send(embed);
+		// Select verses
+		db_ref.get('select book_id from bible_books where title = ?', [book], function (err, row) {
+			if (!row) {
+				send_error(msg, empty_query(), error_text['bible_no_book'].replace('<book>', book));
+				return;
 			}
-		);
+			db_ref.all(
+				'select verse_num, text from bible_'+version+' where book_id = ? and chapter = ? and verse_num between ? and ?',
+				[row.book_id, chapter, verse_start, verse_end],
+				function (err, rows) {
+					msg.channel.send(make_passage_embed(client, msg, flags['p'], version, rows));
+				}
+			);
+		});
 	});
 }
 function help(client, msg, args=[], flags={}, db_ref, db_data) {
@@ -176,6 +185,23 @@ function update(client, msg, args=[], flags={}, db_ref, db_data) {
 	} else {
 		return 2;
 	}
+}
+function votd(client, msg, args=[], flags={}, db_ref, db_data) {
+	db_ref.all('select verse_id from bible_kjv', [], function (err, rows) {
+		const date = new Date().toISOString().replace('T', '').substr(0, 10);
+		const hash = crypto.createHash('md5').update(date).digest('hex');
+		const id = parseInt(hash, 16)%rows.length;
+		db_ref.get('select * from bible_kjv where verse_id = ?', [id], function (err, verse) {
+			db_ref.get('select title from bible_books where book_id = ?', [verse.book_id], function (err, book) {
+				let embed = new Discord.RichEmbed()
+					.setColor(config.embed_color)
+					.setAuthor(client.user.username, config.profile_image, '')
+					.setDescription('**'+book.title+' '+verse.chapter+':'+verse.verse_num+' (KJV)**')
+					.addField('-', '**['+verse.verse_num+']** '+verse.text);
+				msg.channel.send(embed);
+			});
+		});
+	});
 }
 
 module.exports = cmds;

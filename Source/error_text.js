@@ -19,7 +19,7 @@ const error_text = {
 	'missing_semicolon' : 'Error: {} command is a missing trailing semicolon',
 	'bad_command' : 'Bork? (I had some trouble unsterstanding your commands.)',
 	'no_help' : 'Bork? (I couldn\'t find a help page for that command.)',
-	'bad_args' : 'One or more of the arguments passed to this command were not formatted correctly.',
+	'bad_args' : 'One or more of the arguments or flags passed to this command were not formatted correctly or contained incorrect information.',
 	'bible_no_book' : 'There is no book named <book> in the Bible.',
 	'bible_no_passage' : 'The passage you requested does not exist.',
 	'bible_long_passage' : 'Something went wrong. The passage you requested was most likely too large.'

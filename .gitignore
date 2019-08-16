@@ -7,7 +7,12 @@ Media/*
 !Media/puggerbot.jpg
 Source/config.js
 Source/sandbox.js
-SQL
+SQL/Reference/*
+SQL/UserData/*
+SQL/reference.db
+SQL/user_data.db
+!SQL/Reference/bible_books.sql
+!SQL/Reference/bible_kjv.sql
 Legacy
 node_modules
 package-lock.json

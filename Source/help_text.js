@@ -8,6 +8,7 @@ const help_text = {
 	'pet' : 'Give Puggerbot a pet! He\'ll respond with a cute pug gif.',
 	'shutdown' : `Shuts down Puggerbot. Can only be used by ${config.owner.username}.`,
 	'update' : `Restarts Puggerbot to pull from his git repository. Can only be used by ${config.owner.username}.`,
+	'votd' : 'Posts the verse of the day from the KJV.',
 }
 
 module.exports = help_text;
