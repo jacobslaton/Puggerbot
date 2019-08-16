@@ -197,7 +197,8 @@ function votd(client, msg, args=[], flags={}, db_ref, db_data) {
 					.setColor(config.embed_color)
 					.setAuthor(client.user.username, config.profile_image, '')
 					.setDescription('**'+book.title+' '+verse.chapter+':'+verse.verse_num+' (KJV)**')
-					.addField('-', '**['+verse.verse_num+']** '+verse.text);
+					.addField('-', '**['+verse.verse_num+']** '+verse.text)
+					.setTimestamp();
 				msg.channel.send(embed);
 			});
 		});
