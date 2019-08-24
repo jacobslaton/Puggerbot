@@ -55,3 +55,8 @@ shutdown
 
 This command shuts down Puggerbot.
 It can only be used by the bot owner.
+
+votd
+----
+
+This command displays the verse of the day from the KJV of the Bible.

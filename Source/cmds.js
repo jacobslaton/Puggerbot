@@ -19,7 +19,7 @@ function is_admin(msg) {
 function empty_query() {
 	return error_text['empty_query'][Math.floor(Math.random()*error_text['empty_query'].length)];
 }
-function send_error(msg, title, text) {
+function send_error(client, msg, title, text) {
 	msg.channel.send(new Discord.RichEmbed()
 		.setColor(config.embed_color)
 		.setAuthor(client.user.username, config.profile_image, '')
@@ -73,11 +73,11 @@ function make_passage_embed(client, msg, passage, version, rows) {
 		fields[fields.length-1] += verse;
 	});
 	if (fields.length == 1 && fields[0] == '') {
-		send_error(msg, empty_query(), error_text['bible_no_passage']);
+		send_error(client, msg, empty_query(), error_text['bible_no_passage']);
 		return;
 	}
 	if (fields.join('').length > 6000) {
-		send_error(msg, empty_query(), error_text['bible_long_passage']);
+		send_error(client, msg, empty_query(), error_text['bible_long_passage']);
 		return;
 	}
 	let embed = new Discord.RichEmbed()
@@ -94,7 +94,7 @@ function bible(client, msg, args=[], flags={}, db_ref, db_data) {
 	const re_passage = /((?:[0-9] )?(?:[A-z]| )*) ([0-9]+)(?::([0-9]+(?:-[0-9]+)?))?/;
 	const match = re_passage.exec(flags['p']);
 	if (!match) {
-		send_error(msg, error_text.bad_command, error_text['bad_args']);
+		send_error(client, msg, error_text.bad_command, error_text['bad_args']);
 		return;
 	}
 	const book = match[1];
@@ -117,18 +117,30 @@ function bible(client, msg, args=[], flags={}, db_ref, db_data) {
 	}
 	db_ref.get('select name from sqlite_master where type=\'table\' and name=?', ['bible_'+version], function (err, row) {
 		if (!row) {
-			send_error(msg, error_text.bad_command, error_text['bad_args']);
+			send_error(client, msg, error_text.bad_command, error_text['bad_args']);
 			return;
 		}
 		// Select verses
-		db_ref.get('select book_id from bible_books where title = ?', [book], function (err, row) {
-			if (!row) {
-				send_error(msg, empty_query(), error_text['bible_no_book'].replace('<book>', book));
+		db_ref.all('select * from bible_books', function (err, rows) {
+			let book_id = null;
+			rows.forEach(function (row) {
+				let abbr = row.abbr.split(',');
+				if (book == row.title)
+					book_id = row.book_id;
+				abbr.forEach(function (ii) {
+					if (book == ii) {
+						flags['p'] = row.title+flags['p'].slice(book.length);
+						book_id = row.book_id;
+					}
+				});
+			});
+			if (book_id == null) {
+				send_error(client, msg, empty_query(), error_text['bible_no_book'].replace('<book>', book));
 				return;
 			}
 			db_ref.all(
 				'select verse_num, text from bible_'+version+' where book_id = ? and chapter = ? and verse_num between ? and ?',
-				[row.book_id, chapter, verse_start, verse_end],
+				[book_id, chapter, verse_start, verse_end],
 				function (err, rows) {
 					msg.channel.send(make_passage_embed(client, msg, flags['p'], version, rows));
 				}
@@ -140,8 +152,8 @@ function help(client, msg, args=[], flags={}, db_ref, db_data) {
 	if (args.length == 0 || args[0] == 'help') {
 		msg.channel.send(new Discord.RichEmbed()
 			.setColor(config.embed_color)
-			.setAuthor(client.user.username, 'https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg', '')
-			.setThumbnail('https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg')
+			.setAuthor(client.user.username, config.profile_image, '')
+			.setThumbnail(config.profile_image)
 			.setDescription('Version '+config.version)
 			.addField('Flags', 'Some commands require information to be passed through flags. A flag is a hyphen followed by a character or word. The value of the flag can be assigned with `=` or passed as a string using `"`. Ex: `>bible -v=esv -p"Genesis 1:1"`')
 			.addField('Command Specific Help', 'Type `>help [command_name]` for more information on a command.')
@@ -188,7 +200,10 @@ function update(client, msg, args=[], flags={}, db_ref, db_data) {
 }
 function votd(client, msg, args=[], flags={}, db_ref, db_data) {
 	db_ref.all('select verse_id from bible_kjv', [], function (err, rows) {
-		const date = new Date().toISOString().replace('T', '').substr(0, 10);
+		let date = new Date();
+		let title = 'Verse of the Day for '+(date.getMonth()+1).toString()+'/';
+		title += date.getDate().toString()+'/'+date.getFullYear().toString();
+		date = date.toISOString().replace('T', '').substr(0, 10);
 		const hash = crypto.createHash('md5').update(date).digest('hex');
 		const id = parseInt(hash, 16)%rows.length;
 		db_ref.get('select * from bible_kjv where verse_id = ?', [id], function (err, verse) {
@@ -196,6 +211,7 @@ function votd(client, msg, args=[], flags={}, db_ref, db_data) {
 				let embed = new Discord.RichEmbed()
 					.setColor(config.embed_color)
 					.setAuthor(client.user.username, config.profile_image, '')
+					.setTitle(title)
 					.setDescription('**'+book.title+' '+verse.chapter+':'+verse.verse_num+' (KJV)**')
 					.addField('-', '**['+verse.verse_num+']** '+verse.text)
 					.setTimestamp();
