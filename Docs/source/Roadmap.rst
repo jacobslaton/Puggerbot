@@ -25,16 +25,19 @@ v0.2.0 - Bible
 - Commands
 	- bible
 
-v0.2.? - Bible
+v0.2.1 - Bible
 --------------
 
 - Features
 	- Get passage by reference and version
-	- Store preferred version for each user
 - Commands
 	- verse_of_the_day
-- Maybe
-	- Allow users to add prayer requests and view ones from the servers they are in
+
+v0.2.2 - Bible
+--------------
+
+- Features
+	- Added book abbreviations
 
 v0.?.0 - Admin Tools
 --------------------
