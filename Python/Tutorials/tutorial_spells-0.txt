@@ -1,0 +1,11 @@
+**Tutorial: Spells Part 0 of 5 - Index**
+
+`Part 1 - The Basics`
+`Part 2 - Conjuctions`
+`Part 3 - Casting Time, Duration, and Range`
+`Part 4 - Spell Components`
+`Part 5 - Miscellaneous`
+
+**To read one of the tutorials in this series, run the following command and replace X with the index of the desired part.**
+```>tutorial spells X```
+

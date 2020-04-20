@@ -1,0 +1,24 @@
+**Tutorial: Spells Part 2 of 5 - Conjuctions**
+In the last tutorial, we looked at smaller queries that specify one attribute to search for. In this tutorial, we will be looking at how to combine those smaller queries into larger ones.
+
+**Exapmle 2.1**
+The `and` operator joins together two smaller queries. In order for a spell to match the query, it must meet both requirements.
+This command will return all wizard spells of third level or lower.
+```>sp "wizard" in class and level <= 3```
+This command will return all spells of level 3, 4, or 5.
+```>sp level >= 3 and level <= 5```
+
+**Example 2.2**
+The `or` operator also joins together two smaller queries. In order for a spell to match the query, it must meet at least one of the requirements.
+```>sp "paladin" in class or "sorcerer" in class```
+This command will return all paladin spells and all sorcerer spells.
+
+**Example 2.3**
+The `and` and `or` operators can be used together. The `and` operator will be applied before the `or` operator.
+```>sp "paladin" in class and level <=3 or "sorcerer" in class```
+This command will return all paladin spells of third level or lower and all sorcerer spells.
+```>sp "wizard" in class and (school is "evocation" or school is "abjuration")```
+This command will return all of the evocation and abjuration wizard spells.
+
+**To read the next tutorial in this series, run:**```>tutorial spells 3```
+

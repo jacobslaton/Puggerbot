@@ -1,0 +1,15 @@
+**Tutorial: Spells Part 4 of 5 - Spell Components**
+**Example 4.1**
+Searching for spells that have a verbal or somatic component is straightforward. Just use the `verbal` and `somatic` keywords.
+This command will give you the set of all spells that are level 1 and require a verbal component to cast.
+```>sp verbal and level is 1```
+This command will give you the set of all druid spells that require a somatic component to cast.
+```>sp "druid" in class and somatic```
+
+**Example 4.2**
+Searching for spells with specific material components is the same as searching for spells in a specific class.
+```>sp materials contains "diamond"```
+```>sp "gp" in materials```
+
+**To read the next tutorial in this series, run:**```>tutorial spells 5```
+

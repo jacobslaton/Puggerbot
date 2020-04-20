@@ -1,0 +1,25 @@
+**Tutorial: Spells Part 3 of 5 - Casting Time, Duration, and Range**
+The way that `cast`, `duration`, and `range` are searched is unique. These fields require that you specify what unit of measurement you are using.
+
+**Example 3.1**
+To specify a casting time, use an int followed by a unit of measurement.
+```>sp cast is 10 minutes```
+The units you can use with `cast` are `day`, `days`, `hour`, `hours`, `minute`, `minutes`, `action`, `bonus`, and `reaction`. There is nothing special about the last three, they are used the same as the other units.
+```>sp cast is 1 action```
+
+**Example 3.2**
+Specifying a duration is mostly the same as specifying a casting time.
+```>sp duration is 8 hours```
+You can use the same units as `cast`, except for `action`, `bonus`, and `reaction`. You can also use the `round` unit and the keywords `indefinite` and `instantaneous`.
+```>sp duration is 1 round```
+```>sp duration is indefinite```
+
+**Example 3.3**
+The `range` field uses units of distance instead of time.
+```>sp range is 60 feet```
+The units you can use with `range` are `mile`, `miles`, and `feet`. You can also use the keywords `self`, `sight`, `special`, amd `touch`.
+```>sp range is 1 mile```
+```>sp range is touch```
+
+**To read the next tutorial in this series, run:**```>tutorial spells 4```
+

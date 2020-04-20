@@ -1,0 +1,26 @@
+**Tutorial: Roll Part 2 of 3 - Roll Operators**
+**Example 2.1**
+Sometimes, you'll want to keep the highest or lowest roll from a set of rolls. Use the operators "kh" and "kl" to keep the highest or lowest roll, respectively. Dice that are dropped will be striken through.
+```>r 2d20kh```
+```>r 2d20kl```
+You can also specify how many dice you want to keep.
+```>r 5d6kh3```
+
+**Example 2.2**
+You can drop the highest or lowest rolls in the same way you keep them. Just use the "dh" and "dl" operators. These examples are functionally the same as the ones in Example 4.
+```>r 2d20dl```
+```>r 2d20dh```
+```>r 5d6dl2```
+
+**Example 2.3**
+Some role playing systems use exploding dice, denoted by "!" after the roll. An exploding die "explodes" when you roll the highest value possible. When a die explodes, another die is added to the roll. If the additional dice explode, they will keep adding additional dice until no more dice explode. To keep Puggerbot from getting stuck in an infinite loop, the maximum number of times dice can explode in one roll is 50.
+```>r 3d6!```
+You can use "!!" to have dice explode in place. Instead of adding more dice to the roll, additional dice are rolled and added to the exploded die's total. Below is some sample output.
+```3d4!! => (3d4 => [4, 4, 1] => 9)!! => 16```
+To specify what value the dice explode on, you can place the value after the "!!". This roll has the dice explode on 2.
+```>r 3d6!!2```
+
+You can use both the exploding operator and the keep/drop operator on a single roll, however the exploding operator will be applied first then the keep/drop operator.
+
+**To read the next tutorial in this series, run:**```>tutorial roll 3```
+

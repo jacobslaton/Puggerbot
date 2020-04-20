@@ -1,0 +1,25 @@
+**Tutorial: Roll Part 1 of 3 - The Basics**
+**Example 1.1**
+This is one of the most basic uses of this command.
+```>roll 1d20```
+The name `roll` can be shortened to `r`. If you only want to roll one kind of dice, you can omit the "1" that comes before the "d".
+```>r d20```
+The dice don't have to be actual dice, they can have any number of sides.
+```>r 2d13```
+
+**Example 1.2**
+You can just do math. You don't have to roll dice.
+```>r 1+1```
+```>r 7/8```
+```>r 2^4```
+
+**Example 1.3**
+Both rolling dice and math.
+```>r 3d6+d8+4```
+
+**Example 1.4**
+Because Discord uses certain characters for formatting, commands with multiple "`*`" may look malformed. To fix this, put a backtick before your command and then a "`#`" followed by another backtick after your command. On American keyboards, the backtick character can be found on the "`~`" key just below the escape key.
+`>r 2*d20**4+5**6 #`
+
+**To read the next tutorial in this series, run:**```>tutorial roll 2```
+

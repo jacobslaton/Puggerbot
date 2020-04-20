@@ -1,0 +1,31 @@
+**Tutorial: Spells Part 1 of 5 - The Basics**
+This command is used to get a set of spells from Puggerbot's database that match a certain criteria. This criteria is expressed in what is called a query. The set of spells is packaged inside of an html file and is uploaded to Discord. You can open the html file using any modern web browser.
+
+**Example 1.1**
+This is the most basic use of this command.
+```>spells```
+Since no query is given, Puggerbot returns the set containing all spells. The command `spells` can be shortened to `sp`.
+```>sp```
+
+**Example 1.2**
+To ask for a specific spell, use the `is` or `==` operator on `name`.
+```>sp name is "fireball"```
+Note that the spell name doesn't have to be capitalized. Searching for `Fireball`, `fireball`, or `FiReBaLl` will yield the Fireball spell. When searching a field with a words in double quotes, Puggerbot will rarely pay attention to upper or lower case.
+
+**Example 1.3**
+To ask for all the spells in a specific class, use the `in` or `contains` operator on `class`.
+```>sp class contains "wizard"```
+```>sp "Wizard" in class```
+
+**Example 1.4**
+To specify the levels of the spells, use the `is`, `==`, or `!=` operator on `level`.
+```>sp level is 3```
+You can also use `<`, `>`, `<=`, and `>=` to specify a range of levels.
+```>sp level <= 3```
+
+**Example 1.5**
+For any field that you search, you can add the `not` keyword before it to make it have the opposit effect. This command will give you the set of all spells that are not cantrips.
+```>sp not level is 0```
+
+**To read the next tutorial in this series, run:**```>tutorial spells 2```
+

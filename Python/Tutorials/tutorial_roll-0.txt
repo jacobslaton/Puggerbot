@@ -1,0 +1,9 @@
+**Tutorial: Roll Part 0 of 3 - Index**
+
+`Part 1 - The Basics`
+`Part 2 - Roll Operators`
+`Part 3 - Strange Behavior`
+
+**To read one of the tutorials in this series, run the following command and replace X with the index of the desired part.**
+```>tutorial roll X```
+

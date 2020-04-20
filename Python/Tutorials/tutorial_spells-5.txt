@@ -1,0 +1,23 @@
+**Tutorial: Spells Part 5 of 5 - Miscellaneous**
+There are three final fields that have not been covered in these tutorials: `tags`, `src`, and `desc`. They are all searched in the same way as `class` and `materials`.
+
+**Example 5.1**
+The `tags` field is where miscellaneous information about a spell is stored.
+```>sp tags contains "ritual"```
+```>sp "concentration" in tags```
+You can search the `tags` field for spells with a specific shape, such as cone or sphere.
+```>sp tags contains "cone"```
+
+**Example 5.2**
+The `src` field contains the abbreviated title of every offical Wizards of the Coast publication that the spell appeared in, along with each page number it appeared on.
+```>sp src contains "PHB"```
+Currently, the following abbreviations are used for offical WotC publications: PHB, MM, DMG, EE, SCAG, VGM, and XGtE. Unearthed Arcana is not offical, but is included nonetheless. Its abbreviation is UA. You can also search with "Homebrew" to include or exclude homebrew spells.
+```>sp src contains "Homebrew"```
+```>sp not src contains "Homebrew"```
+
+**Example 5.3**
+You can search through a spells description using `desc`.
+```>sp desc contains "Saving Throw"```
+
+**This is the final tutorial on the `spells` command.**
+
